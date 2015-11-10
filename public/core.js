@@ -14,8 +14,19 @@ function mainController($scope, $http) {
 			console.log('Error: ' + data);
 		});
 		
-	// createTodo controller
+	// createTodo controller	
 	$scope.createTodo = function() {
+		var categories = $scope.formData.categories.split(',');
+		var length = categories.length;
+		$scope.formData.categories = [];
+		
+		for (var index = 0; index < length; index++) {
+			var element = categories[index];
+			$scope.formData.categories.push({
+				name : element
+			});
+		}
+		
 		$http.post('/api/todos', $scope.formData)
 			.success(function(data) {
 				$scope.formData = {}; // clean data so the user is ready to enter another one

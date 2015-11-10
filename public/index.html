@@ -34,6 +34,9 @@
 						<label>
 							<input type="checkbox" ng-click="deleteTodo(todo._id)">{{ todo.description }}
 						</label>
+						<div ng-repeat="cat in todo.categories">
+							<label>{{ cat.name }}</label>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -45,6 +48,7 @@
 						<div class="form-group">
 							<input type="text" class="form-control input-lg text-center" placeholder="ToDo title" ng-model="formData.title">
 							<input type="text" class="form-control input-lg text-center" placeholder="I want to do..." ng-model="formData.description">
+							<input type="text" class="form-control input-lg text-center" placeholder="Tags..." ng-model="formData.categories">
 						</div>
 						
 						<button type="submit" class="btn btn-primary btn-lg" ng-click="createTodo()">Add</button>

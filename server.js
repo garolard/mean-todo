@@ -2,6 +2,7 @@
 var express 	= require('express');
 var app			= express();
 var mongoose 	= require('mongoose');
+var Schema		= mongoose.Schema;
 var morgan		= require('morgan'); // logging
 var bodyParser	= require('body-parser'); // pull info from HTML POST
 var methodOverride = require('method-override'); // simulate DELETE and PUT
@@ -18,18 +19,18 @@ app.use(bodyParser.json({type : 'application/vnd.api+json'})); // parse applicat
 app.use(methodOverride());
 
 // modeling data
-var Task = mongoose.model('Task', {
-	title : String,
-	description : String,
-	categories : [{
-		type : mongoose.Schema.Types.ObjectId,
-		ref : 'Category'		
-	}]
-});
-
-var Category = mongoose.model('Category', {
+var CategorySchema = new Schema({
 	name : String
 });
+
+var TaskSchema = new Schema({
+	title : String,
+	description : String,
+	categories : [CategorySchema]
+});
+
+var Category = mongoose.model('Category', CategorySchema);
+var Task = mongoose.model('Task', TaskSchema);
 
 // app routes
 app.get('/api/todos', function(req, res) {
@@ -45,6 +46,7 @@ app.post('/api/todos', function(req, res) {
 	Task.create({
 		title : req.body.title,
 		description : req.body.description,
+		categories : req.body.categories,
 		done : false
 	}, function(err, todo) { // Ni puta idea, parece ser un callback a ejecutar cuando mongo temine de crear el objeto
 		if (err)
